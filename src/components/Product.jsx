@@ -1,29 +1,77 @@
 import Carousel from './Carousel'
 import { IMAGE_URLS } from './constants'
-import { Typography } from 'neetoui'
-import React from 'react'
+import { Spinner, Typography } from 'neetoui'
+import React, { useEffect, useState } from 'react'
+import axios from "axios";
+import { append, isNotNil } from 'ramda';
 
-const Product = () => (
-  <div className='px-6 pb-6'>
-    <div>
-      <Typography className='py-2 text-4xl font-semibold'>Infinix INBOOK</Typography>
-      <hr className='border-2 border-black' />
-    </div>
-    <div className='flex gap-4 mt-6'>
-      <div className='w-2/5'>
-        <Carousel
-          title="Infinix Inbook"
-          imageUrls={IMAGE_URLS}
-        />
+const Product = () => {
+  const [product, setProduct] = useState({})
+  const [isLoading, setIsLoading] = useState(true)
+
+  const fetchProduct = async () => {
+    try {
+      const response = await axios.get("https://smile-cart-backend-staging.neetodeployapp.com/products/infinix-inbook-2");
+      setProduct(response.data)
+    } catch(error) {
+      console.log("An error occurred", error);
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchProduct();
+  }, [])
+
+  const {
+    name,
+    description,
+    mrp,
+    offer_price: offerPrice,
+    image_urls: imageUrls,
+    image_url: imageUrl
+  } = product;
+  const totalDiscount = mrp - offerPrice;
+  const discountPercentage = ((totalDiscount / mrp) * 100).toFixed(1);
+
+  {/*Loader part */}
+  if (isLoading) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center">
+        <Spinner />
       </div>
-      <div className='w-3/5 space-y-4'>
-        <Typography>Infinix Inbook X1 Ci3 10th 8GB 256GB 14 Win10 Grey - 1 Year Warranty.</Typography>
-        <Typography>MRP: $395.97</Typography>
-        <Typography className='font-semibold'>Offer price: $374.43</Typography>
-        <Typography className='font-semibold text-green-600'>6% off</Typography>
+    );
+  }
+
+  return(
+    <div className='px-6 pb-6'>
+      <div>
+        <Typography className='py-2 text-4xl font-semibold' style="h1">{name}</Typography>
+        <hr className='border-2 border-black' />
+      </div>
+      <div className='flex gap-4 mt-6'>
+        <div className='w-2/5'>
+          {
+            isNotNil(imageUrls) ? (
+              <Carousel
+                title={name}
+                imageUrls={append(imageUrl, imageUrls)}
+              />
+            ) : (
+              <img src={imageUrl} alt={name} className='w-48' />
+            )
+          }
+        </div>
+        <div className='w-3/5 space-y-4'>
+          <Typography>{description}</Typography>
+          <Typography>MRP: {mrp}</Typography>
+          <Typography className='font-semibold'>Offer price: {offerPrice}</Typography>
+          <Typography className='font-semibold text-green-600'>{discountPercentage}% off</Typography>
+        </div>
       </div>
     </div>
-  </div>
-)
+  )
+}
 
 export default Product
