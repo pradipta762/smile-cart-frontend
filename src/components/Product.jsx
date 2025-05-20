@@ -1,5 +1,5 @@
 import Carousel from './Carousel'
-import { IMAGE_URLS } from './constants'
+import productsApi from 'apis/products';
 import { Spinner, Typography } from 'neetoui'
 import React, { useEffect, useState } from 'react'
 import axios from "axios";
@@ -11,7 +11,7 @@ const Product = () => {
 
   const fetchProduct = async () => {
     try {
-      const response = await axios.get("https://smile-cart-backend-staging.neetodeployapp.com/products/infinix-inbook-2");
+      const response = await productsApi.show();
       setProduct(response.data)
     } catch(error) {
       console.log("An error occurred", error);
