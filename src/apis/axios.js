@@ -21,11 +21,12 @@ const responseInterceptors = () => {
 }
 
 const requestInterceptors = () => {
-  axios.interceptors.request.use(request =>
-    evolve(
-      {data: serializeKeysToSnakeCase, params: serializeKeysToSnakeCase}
-    )
-  );
+  axios.interceptors.request.use(request => {
+    return evolve(
+      { data: serializeKeysToSnakeCase, params: serializeKeysToSnakeCase },
+      request
+    );
+  });
 };
 
 export default function initializeAxios() {
