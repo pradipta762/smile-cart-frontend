@@ -11,8 +11,8 @@ const Product = () => {
 
   const fetchProduct = async () => {
     try {
-      const response = await productsApi.show();
-      setProduct(response.data)
+      const product = await productsApi.show();
+      setProduct(product)
     } catch(error) {
       console.log("An error occurred", error);
     } finally {
@@ -28,10 +28,11 @@ const Product = () => {
     name,
     description,
     mrp,
-    offer_price: offerPrice,
-    image_urls: imageUrls,
-    image_url: imageUrl
+    offerPrice,
+    imageUrls,
+    imageUrl,
   } = product;
+
   const totalDiscount = mrp - offerPrice;
   const discountPercentage = ((totalDiscount / mrp) * 100).toFixed(1);
 
