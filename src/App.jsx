@@ -9,13 +9,14 @@ import "./App.css";
 import Product from "./components/Product";
 import ProductList from "components/ProductList";
 import PageNotFound from "components/commons/PageNotFound";
+import routes from "routes";
 
 const App = () => (
   <>
     <Switch>
-      <Route exact component={ProductList} path="/products" />
-      <Route exact component={Product} path="/products/:slug" />
-      <Redirect from="/" to="/products" />
+      <Route exact component={ProductList} path={routes.products.index} />
+      <Route exact component={Product} path={routes.products.show} />
+      <Redirect from={routes.root} to={routes.products.index} />
       <Route component={PageNotFound} path="*" />
     </Switch>
   </>
