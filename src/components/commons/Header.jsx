@@ -4,12 +4,13 @@ import { Typography } from 'neetoui';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import CartItemsContext from 'src/contexts/CartItemsContext';
+import useCartItemsStore from 'src/sources/useCartItemsStore';
 
 const Header = ({ title, shouldShowBackButton = true, actionBlock }) => {
   const history = useHistory();
 
-  const [cartItems] = useContext(CartItemsContext);
-  const cartItemsCount = cartItems.length;
+  const { cartItems } = useCartItemsStore();
+  const cartItemsCount = useCartItemsStore(store => store.cartItems.length);
 
   return (
     <div className="m-2">
