@@ -1,10 +1,11 @@
 import React, { useContext } from 'react'
 import { LeftArrow } from 'neetoicons';
 import { Typography } from 'neetoui';
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
+import { Link, useHistory } from 'react-router-dom/cjs/react-router-dom.min'
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import useCartItemsStore from 'src/sources/useCartItemsStore';
 import { keys } from 'ramda';
+import routes from 'routes';
 
 const Header = ({ title, shouldShowBackButton = true, actionBlock }) => {
   const history = useHistory();
@@ -28,7 +29,9 @@ const Header = ({ title, shouldShowBackButton = true, actionBlock }) => {
                 <span className='border neeto-ui-border-black neeto-ui-rounded-full min-w-fit h-5 w-5 flex items-center justify-center self-end p-1'>{cartItemsCount}</span>
               )
             }
-            <AiOutlineShoppingCart size="2rem" />
+            <Link to={routes.cart}>
+              <AiOutlineShoppingCart size="2rem" />
+            </Link>
           </div>
         </div>
       </div>

@@ -9,6 +9,7 @@ import "./App.css";
 import Product from "./components/Product";
 import ProductList from "components/ProductList";
 import PageNotFound from "components/commons/PageNotFound";
+import Cart from "components/Cart";
 import routes from "routes";
 
 const App = () => {
@@ -17,6 +18,8 @@ const App = () => {
       <Switch>
         <Route exact component={ProductList} path={routes.products.index} />
         <Route exact component={Product} path={routes.products.show} />
+        <Route exact component={Cart} path={routes.cart} />
+
         <Redirect from={routes.root} to={routes.products.index} />
         <Route component={PageNotFound} path="*" />
       </Switch>
