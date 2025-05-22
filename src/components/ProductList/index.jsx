@@ -12,7 +12,6 @@ const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true)
   const [searchKey, setSearchKey] = useState("")
-  const [cartItems, setCartItems] = useState([]);
 
   const debouncedSearchKey = useDebounce(searchKey)
 
@@ -28,12 +27,6 @@ const ProductList = () => {
     }
   }
 
-  const toggleIsInCart = (slug) => {
-    setCartItems(prevCartItems =>
-      prevCartItems.includes(slug) ? without([slug], prevCartItems) : [slug, ...prevCartItems]
-    )
-  }
-
   useEffect(() => {
     fetchProducts();
   }, [debouncedSearchKey])
@@ -47,7 +40,6 @@ const ProductList = () => {
   return (
     <div className="flex h-screen flex-col">
       <Header
-        cartItemsCount={cartItems.length}
         title="Smile Cart"
         shouldShowBackButton={false}
         actionBlock={
@@ -68,8 +60,6 @@ const ProductList = () => {
             <ProductListItem
               key={product.slug}
               {...product}
-              isInCart={cartItems.includes(product.slug)}
-              toggleIsInCart={() => toggleIsInCart(product.slug)}
             />
           ))}
         </div>

@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { append, isNotNil } from "ramda";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import { Header, PageLoader, PageNotFound } from "components/commons";
+import AddToCart from "components/commons/AddToCart";
 
 const Product = () => {
   const { slug } = useParams();
@@ -62,6 +63,7 @@ const Product = () => {
           <Typography className="font-semibold text-green-600">
             {discountPercentage}% off
           </Typography>
+          <AddToCart {...{ slug }} />
         </div>
       </div>
     </div>
