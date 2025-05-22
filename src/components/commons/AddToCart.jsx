@@ -1,30 +1,22 @@
 import React from 'react'
-import { useState, useContext } from 'react'
 import { Button } from 'neetoui'
-import { without } from 'ramda'
-import useCartItemsStore from 'src/sources/useCartItemsStore'
-import { shallow } from "zustand/shallowd"
+import { isNil } from 'ramda'
+import ProductQuantity from './ProductQuantity'
+import useSelectedQuantity from 'hooks/useSelectedQuantity'
 
-const AddToCart = ({ slug }) => {
+const AddToCart = ({ slug, availableQuantity }) => {
+  const { selectedQuantity, setSelectedQuantity } = useSelectedQuantity(slug)
 
-  const { isInCart, toggleIsInCart } = useCartItemsStore(store => ({
-    isInCart: store.cartItems.includes(slug),
-    toggleIsInCart: store.toggleIsInCart,
-  }), shallow);
-
-  const handleClick = (event) => {
-    event.stopPropagation();
-    event.preventDefault();
-    toggleIsInCart(slug);
+  const handleClick = e => {
+    e.stopPropagation();
+    e.preventDefault(0);
+    setSelectedQuantity(1);
   }
 
-  return (
-    <Button
-      label={isInCart ? "Remove from cart" : "Add to cart"}
-      size='large'
-      onClick={handleClick}
-    />
-  )
+  if(isNil(selectedQuantity)) {
+    return <Button label='Add to cart' size='large' onClick={handleClick} />
+  }
+  return <ProductQuantity {...{ availableQuantity, slug }} />
 }
 
 export default AddToCart
