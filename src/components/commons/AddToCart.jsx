@@ -4,7 +4,7 @@ import { isNil } from 'ramda'
 import ProductQuantity from './ProductQuantity'
 import useSelectedQuantity from 'hooks/useSelectedQuantity'
 
-const AddToCart = ({ slug, availableQuantity }) => {
+const AddToCart = ({ slug }) => {
   const { selectedQuantity, setSelectedQuantity } = useSelectedQuantity(slug)
 
   const handleClick = e => {
@@ -16,7 +16,7 @@ const AddToCart = ({ slug, availableQuantity }) => {
   if(isNil(selectedQuantity)) {
     return <Button label='Add to cart' size='large' onClick={handleClick} />
   }
-  return <ProductQuantity {...{ availableQuantity, slug }} />
+  return <ProductQuantity {...{ slug }} />
 }
 
 export default AddToCart

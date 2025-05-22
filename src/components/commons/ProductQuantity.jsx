@@ -3,12 +3,19 @@ import { Button, Input, Toastr } from 'neetoui'
 import useSelectedQuantity from 'hooks/useSelectedQuantity'
 import TooltipWrapper from './TooltipWrapper'
 import { VALID_COUNT_REGEX } from 'components/constants'
+import { useShowProduct } from 'hooks/reactQuery/useProductsApi'
 
-const ProductQuantity = ({ availableQuantity, slug }) => {
+const ProductQuantity = ({ slug }) => {
 
   const countInputFocus = useRef(null);
 
   const { selectedQuantity, setSelectedQuantity } = useSelectedQuantity(slug);
+  const parsedSelectedQuantity = parseInt(selectedQuantity) || 0
+  const isNotValidQuantity = parsedSelectedQuantity >= availableQuantity
+
+  const { data: product = {} } = useShowProduct(slug);
+
+  const { availableQuantity } = product;
 
   const preventNavigation = e => {
     e.stopPropagation();
@@ -26,9 +33,6 @@ const ProductQuantity = ({ availableQuantity, slug }) => {
       setSelectedQuantity(value)
     }
   }
-
-  const parsedSelectedQuantity = parseInt(selectedQuantity) || 0
-  const isNotValidQuantity = parsedSelectedQuantity >= availableQuantity
 
   return (
     <div className='neeto-ui-border-black neeto-ui-rounded inline-flex flex-row items-center border'>

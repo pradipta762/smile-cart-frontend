@@ -16,7 +16,7 @@ initializeAxios();
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient }>
       <BrowserRouter>
         <ToastContainer />
         <App />

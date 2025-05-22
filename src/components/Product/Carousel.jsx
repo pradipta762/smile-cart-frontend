@@ -2,11 +2,21 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Button } from 'neetoui'
 import { Left, Right } from 'neetoicons'
 import classNames from 'classnames'
+import { useParams } from 'react-router-dom/cjs/react-router-dom.min'
+import { useShowProduct } from "hooks/reactQuery/useProductsApi";
+import { useParams } from "react-router-dom";
+import { append } from "ramda";
 
 const Carousel = ({ imageUrls, title }) => {
 
   const [currentIndex, setCurrentIndex] = useState(0);
+  const { slug } = useParams();
   const timeRef = useRef(null);
+
+  const { data: { imageUrl, imageUrls: partialImageUrls, title } = {} } =
+    useShowProduct(slug);
+
+  const imageUrls = append(imageUrl, partialImageUrls);
 
   useEffect(() => {
     timeRef.current = setInterval(handleNext, 3000);
