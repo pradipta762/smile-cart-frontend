@@ -1,3 +1,4 @@
+import i18n from 'components/commons/i18n'
 import React, { useState, useEffect } from 'react'
 import { Header, PageLoader } from 'components/commons'
 import productsApi from 'apis/products'
@@ -9,6 +10,7 @@ import ProductCard from './ProductCard'
 import PriceCard from './PriceCard'
 import { cartTotalOf } from 'components/utils'
 import { MRP, OFFER_PRICE } from 'components/constants'
+import withTitle from 'utils/withTitle'
 
 const Cart = () => {
 
@@ -81,4 +83,4 @@ const Cart = () => {
   )
 }
 
-export default Cart;
+export default withTitle(Cart, i18n.t("cart.title"));
