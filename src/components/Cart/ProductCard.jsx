@@ -8,7 +8,7 @@ import useCartItemsStore from 'src/sources/useCartItemsStore'
 const ProductCard = ({ slug, imageUrl, offerPrice, mrp, name, availableQuantity }) => {
 
   const [shouldShowDeleteAlert, setShouldShowDeleteAlert] = useState(false);
-  const removeCartItem = useCartItemsStore(prop("removeCartItem"))
+  const removeCartItem = useCartItemsStore.pickFrom();
 
   return (
     <div className='neeto-ui-rounded neeto-ui-border-black border p-2'>
