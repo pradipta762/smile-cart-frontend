@@ -4,10 +4,9 @@ import { Left, Right } from 'neetoicons'
 import classNames from 'classnames'
 import { useParams } from 'react-router-dom/cjs/react-router-dom.min'
 import { useShowProduct } from "hooks/reactQuery/useProductsApi";
-import { useParams } from "react-router-dom";
 import { append } from "ramda";
 
-const Carousel = ({ imageUrls, title }) => {
+const Carousel = () => {
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const { slug } = useParams();

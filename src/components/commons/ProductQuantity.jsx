@@ -9,13 +9,17 @@ const ProductQuantity = ({ slug }) => {
 
   const countInputFocus = useRef(null);
 
+  const {
+    data: product = {}
+  } = useShowProduct(slug);
+
+  const {
+    availableQuantity
+  } = product;
+
   const { selectedQuantity, setSelectedQuantity } = useSelectedQuantity(slug);
   const parsedSelectedQuantity = parseInt(selectedQuantity) || 0
   const isNotValidQuantity = parsedSelectedQuantity >= availableQuantity
-
-  const { data: product = {} } = useShowProduct(slug);
-
-  const { availableQuantity } = product;
 
   const preventNavigation = e => {
     e.stopPropagation();
