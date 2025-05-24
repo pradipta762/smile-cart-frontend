@@ -1,14 +1,15 @@
-import { Tooltip } from 'neetoui'
-import React from 'react'
+import React from "react";
+
+import { Tooltip } from "neetoui";
 
 const TooltipWrapper = ({ showTooltip, children, ...tooltipProps }) => {
-  if(!showTooltip) return children;
+  if (!showTooltip) return children;
 
   return (
-    <Tooltip {...tooltipProps} >
+    <Tooltip {...tooltipProps}>
       <div>{children}</div>
     </Tooltip>
-  )
-}
+  );
+};
 
-export default TooltipWrapper
+export default TooltipWrapper;

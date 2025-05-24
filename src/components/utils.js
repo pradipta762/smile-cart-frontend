@@ -6,5 +6,5 @@ export const cartTotalOf = (products, priceKey) => {
 
   return sum(
     products.map(product => product[priceKey] * cartItems[product.slug])
-  )
-}
+  );
+};

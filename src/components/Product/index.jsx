@@ -1,21 +1,22 @@
-import Carousel from "./Carousel";
-import productsApi from "apis/products";
-import { Button, Spinner, Typography } from "neetoui";
-import React, { useEffect, useState } from "react";
-import { append, isNotNil } from "ramda";
-import { useParams } from "react-router-dom/cjs/react-router-dom.min";
+import React from "react";
+
 import { Header, PageLoader, PageNotFound } from "components/commons";
 import AddToCart from "components/commons/AddToCart";
-import routes from "routes";
-import useSelectedQuantity from "hooks/useSelectedQuantity";
 import { useShowProduct } from "hooks/reactQuery/useProductsApi";
+import useSelectedQuantity from "hooks/useSelectedQuantity";
+import { Button, Typography } from "neetoui";
+import { isNotNil } from "ramda";
+import { useParams } from "react-router-dom/cjs/react-router-dom.min";
+import routes from "routes";
+
+import Carousel from "./Carousel";
 
 const Product = () => {
   const { slug } = useParams();
 
   const { data: product = {}, isLoading, isError } = useShowProduct(slug);
 
-  const { selectedQuantity, setSelectedQuantity } = useSelectedQuantity(slug)
+  const { selectedQuantity, setSelectedQuantity } = useSelectedQuantity(slug);
 
   if (isError) return <PageNotFound />;
 
@@ -39,7 +40,7 @@ const Product = () => {
           {isNotNil(imageUrls) ? (
             <Carousel />
           ) : (
-            <img src={imageUrl} alt={name} className="w-48" />
+            <img alt={name} className="w-48" src={imageUrl} />
           )}
         </div>
         <div className="w-3/5 space-y-4">

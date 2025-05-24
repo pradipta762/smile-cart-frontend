@@ -1,22 +1,24 @@
 import React from "react";
-import { BrowserRouter } from "react-router-dom";
+
 import ReactDOM from "react-dom/client";
-import i18n from "components/commons/i18n";
+import { QueryClientProvider } from "react-query";
+import { BrowserRouter } from "react-router-dom";
+import queryClient from "utils/queryClient";
 
 import App from "./App";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 
+// eslint-disable-next-line import/order
 import initializeAxios from "apis/axios";
+// eslint-disable-next-line import/order
 import { ToastContainer } from "react-toastify";
-import { QueryClientProvider } from "react-query";
-import queryClient from "utils/queryClient";
 
 initializeAxios();
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient }>
+    <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <ToastContainer />
         <App />

@@ -1,24 +1,23 @@
 import axios from "axios";
-import { t } from "i18next"
+import { t } from "i18next";
+import { keysToCamelCase, serializeKeysToSnakeCase } from "neetocist";
 import { Toastr } from "neetoui";
-import { keysToCamelCase, serializeKeysToSnakeCase } from 'neetocist'
 import { evolve } from "ramda";
 
 const shouldShowToastr = response =>
   typeof response === "object" && response?.noticeCode;
 
 const showSuccessToastr = response => {
-  if(shouldShowToastr(response.data))
-    Toastr.success(response.data)
-}
+  if (shouldShowToastr(response.data)) Toastr.success(response.data);
+};
 
 const showErrorToastr = error => {
-  if(error.message === t("error.networkError")) {
-    Toastr.error(t("error.noInternetConnection"))
-  } else if(error.response?.status !== 404) {
-    Toastr.error(error)
+  if (error.message === t("error.networkError")) {
+    Toastr.error(t("error.noInternetConnection"));
+  } else if (error.response?.status !== 404) {
+    Toastr.error(error);
   }
-}
+};
 
 const setHttpHeaders = () => {
   axios.defaults.headers = {
@@ -28,34 +27,37 @@ const setHttpHeaders = () => {
 };
 
 const transformResponseKeysToCamelCase = response => {
-  if(response.data) response.data = keysToCamelCase(response.data)
-}
+  if (response.data) response.data = keysToCamelCase(response.data);
+};
 
 const responseInterceptors = () => {
   axios.interceptors.response.use(
     response => {
       transformResponseKeysToCamelCase(response);
       showSuccessToastr(response);
+
       return response.data;
     },
     error => {
       showErrorToastr(error);
+
       return Promise.reject(error);
     }
   );
 };
 
 const requestInterceptors = () => {
-  axios.interceptors.request.use(request => {
-    return evolve(
+  axios.interceptors.request.use(request =>
+    evolve(
       { data: serializeKeysToSnakeCase, params: serializeKeysToSnakeCase },
       request
-    );
-  });
+    )
+  );
 };
 
 export default function initializeAxios() {
-  axios.defaults.baseURL = "https://smile-cart-backend-staging.neetodeployapp.com/";
+  axios.defaults.baseURL =
+    "https://smile-cart-backend-staging.neetodeployapp.com/";
   setHttpHeaders();
   responseInterceptors();
   requestInterceptors();

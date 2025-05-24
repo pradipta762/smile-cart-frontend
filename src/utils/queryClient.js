@@ -1,7 +1,8 @@
-import { QueryClient, QueryCache } from "react-query";
-import { persistQueryClient } from "react-query/persistQueryClient-experimental"
-import { createWebStoragePersistor } from "react-query/createWebStoragePersistor-experimental";
 import { QUERY_KEYS } from "constants/query";
+
+import { QueryClient, QueryCache } from "react-query";
+import { createWebStoragePersistor } from "react-query/createWebStoragePersistor-experimental";
+import { persistQueryClient } from "react-query/persistQueryClient-experimental";
 
 const localStoragePersistor = createWebStoragePersistor({
   storage: window.localStorage,
@@ -23,8 +24,10 @@ persistQueryClient({
   maxAge: Infinity,
   dehydrateOptions: {
     shouldDehydrateQuery: ({ queryKey }) =>
-    [QUERY_KEYS.COUNTRIES, QUERY_KEYS.STATES].some(key => queryKey.includes(key))
-  }
+      [QUERY_KEYS.COUNTRIES, QUERY_KEYS.STATES].some(key =>
+        queryKey.includes(key)
+      ),
+  },
 });
 
 export default queryClient;

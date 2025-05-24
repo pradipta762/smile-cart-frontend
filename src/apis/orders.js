@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const create = payload => axios.post("orders", payload)
+const create = payload => axios.post("orders", payload);
 
-const ordersApi = { create }
+const ordersApi = { create };
 
 export default ordersApi;

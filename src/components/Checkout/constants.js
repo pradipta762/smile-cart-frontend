@@ -1,5 +1,5 @@
-import { t } from "i18next"
-import * as yup from "yup"
+import { t } from "i18next";
+import * as yup from "yup";
 
 export const CHECKOUT_FORM_INITIAL_VALUES = {
   email: "",
@@ -38,7 +38,7 @@ export const CHECKOUT_FORM_VALIDATION_SCHEMA = yup.object().shape({
     })
     .nullable()
     .required(t("validations.stateRequired")),
-  zipCode: yup.number().required(t("validations.zipCodeRequired"))
-})
+  zipCode: yup.number().required(t("validations.zipCodeRequired")),
+});
 
-export const CHECKOUT_LOCAL_STORAGE_KEY = "checkoutUserDetails"
+export const CHECKOUT_LOCAL_STORAGE_KEY = "checkoutUserDetails";

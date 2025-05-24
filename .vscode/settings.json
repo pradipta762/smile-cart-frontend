@@ -1,5 +1,9 @@
 {
   "files.trimTrailingWhitespace": true,
   "files.trimFinalNewlines": true,
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "cSpell.words": [
+    "neeto",
+    "neetoui"
+  ]
 }

@@ -1,17 +1,16 @@
-import { Typography } from 'neetoui'
-import React from 'react'
-import { Trans } from 'react-i18next'
+import React from "react";
 
-const PriceEntry = ({ totalPrice, i18nKey, className = "" }) => {
-  return (
-    <Typography className='flex justify-between' style="h5">
-      <Trans
-        {...{ i18nKey }}
-        components={{ span: <span {...{ className }} /> }}
-        values={{ totalPrice }}
-      />
-    </Typography>
-  )
-}
+import { Typography } from "neetoui";
+import { Trans } from "react-i18next";
 
-export default PriceEntry
+const PriceEntry = ({ totalPrice, i18nKey, className = "" }) => (
+  <Typography className="flex justify-between" style="h5">
+    <Trans
+      {...{ i18nKey }}
+      components={{ span: <span {...{ className }} /> }}
+      values={{ totalPrice }}
+    />
+  </Typography>
+);
+
+export default PriceEntry;

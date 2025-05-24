@@ -1,7 +1,8 @@
 import axios from "axios";
 
-const fetch = () => axios.get("states", { params })
+// eslint-disable-next-line no-undef
+const fetch = () => axios.get("states", { params });
 
-const statesApi = { fetch }
+const statesApi = { fetch };
 
 export default statesApi;

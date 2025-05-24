@@ -1,57 +1,56 @@
-import { useRef } from 'react'
-import { Button, Input, Toastr } from 'neetoui'
-import useSelectedQuantity from 'hooks/useSelectedQuantity'
-import TooltipWrapper from './TooltipWrapper'
-import { VALID_COUNT_REGEX } from 'components/constants'
-import { useShowProduct } from 'hooks/reactQuery/useProductsApi'
+import { useRef } from "react";
+
+import { VALID_COUNT_REGEX } from "components/constants";
+import { useShowProduct } from "hooks/reactQuery/useProductsApi";
+import useSelectedQuantity from "hooks/useSelectedQuantity";
+import { Button, Input, Toastr } from "neetoui";
+
+import TooltipWrapper from "./TooltipWrapper";
 
 const ProductQuantity = ({ slug }) => {
-
   const countInputFocus = useRef(null);
 
-  const {
-    data: product = {}
-  } = useShowProduct(slug);
+  const { data: product = {} } = useShowProduct(slug);
 
-  const {
-    availableQuantity
-  } = product;
+  const { availableQuantity } = product;
 
   const { selectedQuantity, setSelectedQuantity } = useSelectedQuantity(slug);
-  const parsedSelectedQuantity = parseInt(selectedQuantity) || 0
-  const isNotValidQuantity = parsedSelectedQuantity >= availableQuantity
+  const parsedSelectedQuantity = parseInt(selectedQuantity) || 0;
+  const isNotValidQuantity = parsedSelectedQuantity >= availableQuantity;
 
   const preventNavigation = e => {
     e.stopPropagation();
     e.preventDefault();
-  }
+  };
 
   const handleSetCount = event => {
     const { value } = event.target;
     const isNotValidInputQuantity = parseInt(value) > availableQuantity;
-    if(isNotValidInputQuantity) {
-      Toastr.error(`Only ${availableQuantity} units are available`, { autoClose: 2000 })
-      setSelectedQuantity(availableQuantity)
+    if (isNotValidInputQuantity) {
+      Toastr.error(`Only ${availableQuantity} units are available`, {
+        autoClose: 2000,
+      });
+      setSelectedQuantity(availableQuantity);
       countInputFocus.current.blur();
-    } else if(VALID_COUNT_REGEX.test(value)) {
-      setSelectedQuantity(value)
+    } else if (VALID_COUNT_REGEX.test(value)) {
+      setSelectedQuantity(value);
     }
-  }
+  };
 
   return (
-    <div className='neeto-ui-border-black neeto-ui-rounded inline-flex flex-row items-center border'>
+    <div className="neeto-ui-border-black neeto-ui-rounded inline-flex flex-row items-center border">
       <Button
-        className='focus-within:ring-0'
-        label='-'
-        style='text'
-        onClick={(e) => {
-          setSelectedQuantity(parsedSelectedQuantity - 1)
-          preventNavigation(e)
+        className="focus-within:ring-0"
+        label="-"
+        style="text"
+        onClick={e => {
+          setSelectedQuantity(parsedSelectedQuantity - 1);
+          preventNavigation(e);
         }}
       />
       <Input
         nakedInput
-        className='ml-2'
+        className="ml-2"
         contentSize="2"
         ref={countInputFocus}
         value={selectedQuantity}
@@ -64,18 +63,18 @@ const ProductQuantity = ({ slug }) => {
         showTooltip={isNotValidQuantity}
       >
         <Button
-          className='focus-within:ring-0'
-          label='+'
-          style='text'
+          className="focus-within:ring-0"
           disabled={isNotValidQuantity}
-          onClick={(e) => {
-            setSelectedQuantity(parsedSelectedQuantity + 1)
+          label="+"
+          style="text"
+          onClick={e => {
+            setSelectedQuantity(parsedSelectedQuantity + 1);
             preventNavigation(e);
           }}
         />
       </TooltipWrapper>
     </div>
-  )
-}
+  );
+};
 
-export default ProductQuantity
+export default ProductQuantity;

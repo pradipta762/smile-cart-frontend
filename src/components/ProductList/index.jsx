@@ -1,21 +1,21 @@
-import { filterNonNull } from 'neetocist';
-import useQueryParams from 'hooks/useQueryParams';
-import React, { useEffect, useState } from 'react'
-import productsApi from 'apis/products'
-import ProductListItem from './ProductListItem'
-import { Header, PageLoader, PageNotFound } from "components/commons";
-import { Input, NoData, Pagination } from 'neetoui';
-import { Search } from 'neetoicons';
-import { isEmpty, mergeLeft, without } from 'ramda';
-import { useFetchProducts } from 'hooks/reactQuery/useProductsApi';
+import React, { useState } from "react";
+
+import { Header, PageLoader } from "components/commons";
+import { useFetchProducts } from "hooks/reactQuery/useProductsApi";
+import useFuncDebounce from "hooks/useFuncDebounce";
+import useQueryParams from "hooks/useQueryParams";
+import { filterNonNull } from "neetocist";
+import { Search } from "neetoicons";
+import { Input, NoData, Pagination } from "neetoui";
+import { isEmpty, mergeLeft } from "ramda";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import routes from "routes";
+import { buildUrl } from "utils/url";
+
 import { DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE } from "./constants";
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
-import { buildUrl } from 'utils/url';
-import routes from 'routes';
-import useFuncDebounce from 'hooks/useFuncDebounce';
+import ProductListItem from "./ProductListItem";
 
 const ProductList = () => {
-
   const queryParams = useQueryParams();
   const { page, pageSize, searchTerm = "" } = queryParams;
   const [searchKey, setSearchKey] = useState(searchTerm);
@@ -26,63 +26,62 @@ const ProductList = () => {
     searchTerm,
     page: page || DEFAULT_PAGE_INDEX,
     pageSize: pageSize || DEFAULT_PAGE_SIZE,
-  }
+  };
 
-  const { data: { products = [], totalProductsCount } = {}, isLoading } = useFetchProducts(productParams);
+  const { data: { products = [], totalProductsCount } = {}, isLoading } =
+    useFetchProducts(productParams);
 
   const handlePageNavigation = page =>
     history.replace(
-      buildUrl(routes.products.index, mergeLeft({ page, pageSize: DEFAULT_PAGE_SIZE }))
-    )
+      buildUrl(
+        routes.products.index,
+        mergeLeft({ page, pageSize: DEFAULT_PAGE_SIZE })
+      )
+    );
 
   const updateQueryParams = useFuncDebounce(value => {
     const params = {
       page: DEFAULT_PAGE_INDEX,
       pageSize: DEFAULT_PAGE_SIZE,
-      searchTerm: value || null
-    }
-    setSearchKey(value)
+      searchTerm: value || null,
+    };
+    setSearchKey(value);
 
-    history.replace(buildUrl(routes.products.index, filterNonNull(params)))
-  })
+    history.replace(buildUrl(routes.products.index, filterNonNull(params)));
+  });
 
-  if(isLoading) {
-    return (
-      <PageLoader />
-    )
+  if (isLoading) {
+    return <PageLoader />;
   }
 
   return (
     <div className="flex h-screen flex-col">
       <Header
-        title="Smile Cart"
         shouldShowBackButton={false}
+        title="Smile Cart"
         actionBlock={
           <Input
-            placeholder='Search products'
+            placeholder="Search products"
             prefix={<Search />}
-            type='search'
+            type="search"
             value={searchKey}
             onChange={({ target: { value } }) => {
-              updateQueryParams(value)
-              setSearchKey(value)
+              updateQueryParams(value);
+              setSearchKey(value);
             }}
           />
         }
       />
       {isEmpty(products) ? (
-        <NoData className='h-full w-full' title='No products to show' />
+        <NoData className="h-full w-full" title="No products to show" />
       ) : (
-        <div className='grid grid-cols-2 justify-items-center gap-y-8 md:grid-cols-3 lg:grid-cols-4'>
+        <div className="grid grid-cols-2 justify-items-center gap-y-8 md:grid-cols-3 lg:grid-cols-4">
           {products.map(product => (
-            <ProductListItem
-              key={product.slug}
-              {...product}
-            />
+            <ProductListItem key={product.slug} {...product} />
           ))}
         </div>
       )}
-      <div className="py-5 self-end">
+      <div className="self-end py-5">
         <Pagination
           count={totalProductsCount}
           navigate={handlePageNavigation}
@@ -91,7 +90,7 @@ const ProductList = () => {
         />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ProductList
+export default ProductList;

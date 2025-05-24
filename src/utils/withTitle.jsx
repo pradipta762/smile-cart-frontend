@@ -1,10 +1,11 @@
-import React from 'react'
-import { t } from 'i18next'
-import { Helmet } from 'react-helmet'
+import React from "react";
+
+import { t } from "i18next";
+import { Helmet } from "react-helmet";
 
 const withTitle = (Component, title) => {
   const PageTitle = props => {
-    const pageTitle = title ? t("pageTitle", { title }) : t("title")
+    const pageTitle = title ? t("pageTitle", { title }) : t("title");
 
     return (
       <>
@@ -13,9 +14,10 @@ const withTitle = (Component, title) => {
         </Helmet>
         <Component {...props} />
       </>
-    )
-  }
-  return PageTitle;
-}
+    );
+  };
 
-export default withTitle
+  return PageTitle;
+};
+
+export default withTitle;

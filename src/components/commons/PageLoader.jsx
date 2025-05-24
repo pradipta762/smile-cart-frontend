@@ -1,10 +1,11 @@
-import { Spinner } from 'neetoui'
-import React from 'react'
+import React from "react";
+
+import { Spinner } from "neetoui";
 
 const PageLoader = () => (
-  <div className='w-full h-screen flex items-center justify-center'>
+  <div className="flex h-screen w-full items-center justify-center">
     <Spinner />
   </div>
-)
+);
 
-export default PageLoader
+export default PageLoader;

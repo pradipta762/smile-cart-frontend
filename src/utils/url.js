@@ -5,11 +5,12 @@ import { isEmpty, toPairs, omit, pipe } from "ramda";
 export const buildUrl = (route, params) => {
   const placeHolders = [];
   toPairs(params).forEach(([key, value]) => {
-    if(route.includes(`:${key}`)) {
-      placeHolders.push(key)
-      route = route.replace(`:${key}`,encodeURIComponent(value))
+    if (route.includes(`:${key}`)) {
+      placeHolders.push(key);
+      route = route.replace(`:${key}`, encodeURIComponent(value));
     }
   });
+
   const queryParams = pipe(
     omit(placeHolders),
     keysToSnakeCase,
@@ -17,4 +18,4 @@ export const buildUrl = (route, params) => {
   )(params);
 
   return isEmpty(queryParams) ? route : `${route}?${queryParams}`;
-}
+};

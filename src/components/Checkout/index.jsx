@@ -1,31 +1,39 @@
-import React, { useRef, useState } from 'react'
-import { setToLocalStorage, getFromLocalStorage } from 'utils/storage'
-import Items from './Items'
-import { PageLoader } from 'components/commons'
-import i18n from 'components/commons/i18n'
-import { useFetchCountries, useCreateOrder } from 'hooks/reactQuery/useCheckoutApi'
-import { LeftArrow } from 'neetoicons'
-import { Checkbox, Typography } from 'neetoui'
-import { useTranslation } from 'react-i18next'
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
-import withTitle from 'utils/withTitle'
-import Form from './Form'
-import { Form as NeetoUIForm } from 'neetoui/formik'
-import { CHECKOUT_FORM_INITIAL_VALUES, CHECKOUT_FORM_VALIDATION_SCHEMA, CHECKOUT_LOCAL_STORAGE_KEY } from './constants'
-import useCartItemsStore from 'src/sources/useCartItemsStore'
-import routes from 'routes'
-import { useFetchCartProducts } from 'hooks/reactQuery/useProductsApi'
-import { isEmpty, keys } from 'ramda'
+import React, { useRef, useState } from "react";
+
+import { PageLoader } from "components/commons";
+import i18n from "components/commons/i18n";
+import {
+  useFetchCountries,
+  useCreateOrder,
+} from "hooks/reactQuery/useCheckoutApi";
+import { useFetchCartProducts } from "hooks/reactQuery/useProductsApi";
+import { LeftArrow } from "neetoicons";
+import { Checkbox, Typography } from "neetoui";
+import { Form as NeetoUIForm } from "neetoui/formik";
+import { isEmpty, keys } from "ramda";
+import { useTranslation } from "react-i18next";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import routes from "routes";
+import useCartItemsStore from "src/sources/useCartItemsStore";
+import { setToLocalStorage, getFromLocalStorage } from "utils/storage";
+import withTitle from "utils/withTitle";
+
+import {
+  CHECKOUT_FORM_INITIAL_VALUES,
+  CHECKOUT_FORM_VALIDATION_SCHEMA,
+  CHECKOUT_LOCAL_STORAGE_KEY,
+} from "./constants";
+import Form from "./Form";
+import Items from "./Items";
 
 const Checkout = () => {
-
-  const [isSubmitDisabled, setIsSubmitDisabled] = useState(false)
+  const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
 
   const { t } = useTranslation();
   const history = useHistory();
 
-  const timerRef = useRef(null)
-  const checkboxRef = useRef(null)
+  const timerRef = useRef(null);
+  const checkboxRef = useRef(null);
 
   const { cartItems, clearCart } = useCartItemsStore.pick();
 
@@ -37,41 +45,41 @@ const Checkout = () => {
 
   const isLoading = isLoadingProducts || isLoadingCountries;
 
-  const checkoutFormData = getFromLocalStorage(CHECKOUT_LOCAL_STORAGE_KEY)
+  const checkoutFormData = getFromLocalStorage(CHECKOUT_LOCAL_STORAGE_KEY);
 
   const redirectToHome = () => {
     timerRef.current = setTimeout(() => {
-      history.push(routes.root)
+      history.push(routes.root);
       clearCart();
-    }, 1500)
-  }
+    }, 1500);
+  };
 
   const handleRedirect = () => {
-    if(timerRef.current) {
-      history.push(routes.root)
+    if (timerRef.current) {
+      history.push(routes.root);
       clearCart();
-      clearTimeout(timerRef.current)
+      clearTimeout(timerRef.current);
     } else {
       history.goBack();
     }
-  }
+  };
 
   const handleSubmit = values => {
     const dataToPersist = checkboxRef.current.checked ? values : null;
-    setIsSubmitDisabled(true)
+    setIsSubmitDisabled(true);
     createOrder(
       { payload: values },
       {
         onSuccess: () => {
-          setToLocalStorage(CHECKOUT_LOCAL_STORAGE_KEY, dataToPersist)
+          setToLocalStorage(CHECKOUT_LOCAL_STORAGE_KEY, dataToPersist);
           redirectToHome();
         },
-        onError: () => setIsSubmitDisabled(false)
+        onError: () => setIsSubmitDisabled(false),
       }
-    )
-  }
+    );
+  };
 
-  if(isLoading) return <PageLoader />
+  if (isLoading) return <PageLoader />;
 
   if (isEmpty(cartItems)) return history.push(routes.root);
 
@@ -84,24 +92,24 @@ const Checkout = () => {
         onsubmit: handleSubmit,
       }}
     >
-      <div className='flex space-x-4'>
+      <div className="flex space-x-4">
         <div className="m-10 w-1/2">
           <div className="flex items-center">
             <LeftArrow
-              className='hover:neeto-ui-bg-gray-400 neeto-ui-rounded-full mr-4'
+              className="hover:neeto-ui-bg-gray-400 neeto-ui-rounded-full mr-4"
               onClick={handleRedirect}
             />
             <Typography
-              className='text-left'
-              component='u'
+              className="text-left"
+              component="u"
               style="h3"
-              textTransform='uppercase'
-              weight='bold'
+              textTransform="uppercase"
+              weight="bold"
             >
               {t("checkOut")}
             </Typography>
           </div>
-          <div className='mt-8 space-y-4'>
+          <div className="mt-8 space-y-4">
             <Form />
             <Checkbox
               defaultChecked
@@ -110,12 +118,12 @@ const Checkout = () => {
             />
           </div>
         </div>
-        <div className='neeto-ui-bg-gray-300 h-screen w-1/2 pt-10'>
+        <div className="neeto-ui-bg-gray-300 h-screen w-1/2 pt-10">
           <Items {...{ isSubmitDisabled }} />
         </div>
       </div>
     </NeetoUIForm>
-  )
-}
+  );
+};
 
-export default withTitle(Checkout, i18n.t("ckeckout"))
+export default withTitle(Checkout, i18n.t("ckeckout"));

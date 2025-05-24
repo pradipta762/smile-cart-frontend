@@ -1,16 +1,17 @@
 import { QUERY_KEYS } from "constants/query";
-import { useQueries, useQuery } from "react-query";
+
 import productsApi from "apis/products";
 import { existsBy } from "neetocist";
-import { useTranslation } from "react-i18next";
-import useCartItemsStore from "src/sources/useCartItemsStore";
 import { Toastr } from "neetoui";
 import { prop } from "ramda";
+import { useTranslation } from "react-i18next";
+import { useQueries, useQuery } from "react-query";
+import useCartItemsStore from "src/sources/useCartItemsStore";
 
 export const useShowProduct = slug =>
   useQuery({
     queryKey: [QUERY_KEYS.PRODUCTS, slug],
-    queryFn: () => productsApi.show(slug)
+    queryFn: () => productsApi.show(slug),
   });
 
 export const useFetchProducts = params =>
@@ -21,24 +22,26 @@ export const useFetchProducts = params =>
   });
 
 export const useFetchCartProducts = slugs => {
-  const { t } = useTranslation
+  const { t } = useTranslation;
   const { cartItems, setSelectedQuantity } = useCartItemsStore();
   const responses = useQueries(
     slugs.map(slug => ({
       queryKey: [QUERY_KEYS.PRODUCTS, slug],
       queryFn: () => productsApi.show(slug),
       onSuccess: ({ availableQuantity, name }) => {
-        if(availableQuantity >= cartItems[slug]) return;
+        if (availableQuantity >= cartItems[slug]) return;
 
-        setSelectedQuantity(slug, availableQuantity)
-        if(availableQuantity === 0) {
-          Toastr.error(t("product.error.removedFromCart", { name }), { autoClose: 2000 })
+        setSelectedQuantity(slug, availableQuantity);
+        if (availableQuantity === 0) {
+          Toastr.error(t("product.error.removedFromCart", { name }), {
+            autoClose: 2000,
+          });
         }
-      }
+      },
     }))
-  )
-  const data = responses.map(prop("data")).filter(Boolean)
+  );
+  const data = responses.map(prop("data")).filter(Boolean);
   const isLoading = existsBy({ isLoading: true }, responses);
 
   return { data, isLoading };
-}
+};
