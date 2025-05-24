@@ -1,8 +1,11 @@
 import countriesApi from "apis/countries";
+import ordersApi from "apis/orders";
 import statesApi from "apis/states";
 import { QUERY_KEYS } from "constants/query";
 import { prop } from "ramda";
-import { useQuery } from "react-query";
+import { useQuery, useMutation } from "react-query";
+
+export const useCreateOrder = () => useMutation(ordersApi.create)
 
 export const useFetchCountries = () =>
   useQuery({
