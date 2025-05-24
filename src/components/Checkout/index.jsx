@@ -1,15 +1,17 @@
 import React, { useRef, useState } from 'react'
+import { setToLocalStorage, getFromLocalStorage } from 'utils/storage'
+import Items from './Items'
 import { PageLoader } from 'components/commons'
 import i18n from 'components/commons/i18n'
 import { useFetchCountries, useCreateOrder } from 'hooks/reactQuery/useCheckoutApi'
 import { LeftArrow } from 'neetoicons'
-import { Button, Typography } from 'neetoui'
+import { Checkbox, Typography } from 'neetoui'
 import { useTranslation } from 'react-i18next'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
 import withTitle from 'utils/withTitle'
 import Form from './Form'
 import { Form as NeetoUIForm } from 'neetoui/formik'
-import { CHECKOUT_FORM_INITIAL_VALUES, CHECKOUT_FORM_VALIDATION_SCHEMA } from './constants'
+import { CHECKOUT_FORM_INITIAL_VALUES, CHECKOUT_FORM_VALIDATION_SCHEMA, CHECKOUT_LOCAL_STORAGE_KEY } from './constants'
 import useCartItemsStore from 'src/sources/useCartItemsStore'
 import routes from 'routes'
 
@@ -21,11 +23,19 @@ const Checkout = () => {
   const history = useHistory();
 
   const timerRef = useRef(null)
+  const checkboxRef = useRef(null)
 
-  const clearCart = useCartItemsStore.pickFrom();
+  const { cartItems, clearCart } = useCartItemsStore.pick();
 
-  const { isLoading } = useFetchCountries();
+  const { isLoading: isLoadingProducts } = useFetchCartProducts(
+    keys(cartItems)
+  );
+  const { isLoading: isLoadingCountries } = useFetchCountries();
   const { mutate: createOrder } = useCreateOrder();
+
+  const isLoading = isLoadingProducts || isLoadingCountries;
+
+  const checkoutFormData = getFromLocalStorage(CHECKOUT_LOCAL_STORAGE_KEY)
 
   const redirectToHome = () => {
     timerRef.current = setTimeout(() => {
@@ -45,11 +55,13 @@ const Checkout = () => {
   }
 
   const handleSubmit = values => {
+    const dataToPersist = checkboxRef.current.checked ? values : null;
     setIsSubmitDisabled(true)
     createOrder(
       { payload: values },
       {
         onSuccess: () => {
+          setToLocalStorage(CHECKOUT_LOCAL_STORAGE_KEY, dataToPersist)
           redirectToHome();
         },
         onError: () => setIsSubmitDisabled(false)
@@ -59,11 +71,13 @@ const Checkout = () => {
 
   if(isLoading) return <PageLoader />
 
+  if (isEmpty(cartItems)) return history.push(routes.root);
+
   return (
     <NeetoUIForm
       formProps={{ noValidate: true }}
       formikProps={{
-        initialValues: CHECKOUT_FORM_INITIAL_VALUES,
+        initialValues: checkoutFormData || CHECKOUT_FORM_INITIAL_VALUES,
         validationSchema: CHECKOUT_FORM_VALIDATION_SCHEMA,
         onsubmit: handleSubmit,
       }}
@@ -87,18 +101,15 @@ const Checkout = () => {
           </div>
           <div className='mt-8 space-y-4'>
             <Form />
+            <Checkbox
+              defaultChecked
+              label={t("saveInformationForNextTime")}
+              ref={checkboxRef}
+            />
           </div>
         </div>
         <div className='neeto-ui-bg-gray-300 h-screen w-1/2 pt-10'>
-
-          <div className='mt-auto flex justify-center'>
-            <Button
-              className='bg-neutral-800 w-1/3 justify-center'
-              disabled={isSubmitDisabled}
-              label={t("confirmOrder")}
-              type='submit'
-            />
-          </div>
+          <Items {...{ isSubmitDisabled }} />
         </div>
       </div>
     </NeetoUIForm>
