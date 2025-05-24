@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { memo, useContext } from 'react'
 import { LeftArrow } from 'neetoicons';
 import { Typography } from 'neetoui';
 import { Link, useHistory } from 'react-router-dom/cjs/react-router-dom.min'
@@ -40,4 +40,4 @@ const Header = ({ title, shouldShowBackButton = true, actionBlock }) => {
   )
 }
 
-export default Header
+export default memo(Header)

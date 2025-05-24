@@ -1,4 +1,4 @@
-import { Tag } from 'neetoui';
+import { Tag, Typography } from 'neetoui';
 import React from 'react'
 import useCartItemsStore from 'src/sources/useCartItemsStore'
 

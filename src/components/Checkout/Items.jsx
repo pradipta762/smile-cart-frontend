@@ -7,6 +7,8 @@ import useCartItemsStore from 'src/sources/useCartItemsStore';
 import Product from './Product';
 import PriceEntry from './PriceEntry';
 import { Button } from 'neetoui';
+import { shallow } from 'zustand/shallow';
+import { keys } from 'ramda';
 
 const Items = ({ isSubmitDisabled }) => {
 

@@ -1,6 +1,6 @@
 import AddToCart from "components/commons/AddToCart";
 import { Typography } from "neetoui";
-import React from "react";
+import React, { memo } from "react";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import routes from "routes";
 import { buildUrl } from "utils/url";
@@ -19,4 +19,4 @@ const ProductListItem = ({ imageUrl, name, offerPrice, slug }) => (
   </Link>
 );
 
-export default ProductListItem;
+export default memo(ProductListItem);

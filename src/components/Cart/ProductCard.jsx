@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { memo, useState } from 'react'
 import ProductQuantity from 'components/commons/ProductQuantity'
 import { Alert, Typography } from 'neetoui'
 import { Delete } from 'neetoicons'
@@ -46,4 +46,4 @@ const ProductCard = ({ slug, imageUrl, offerPrice, mrp, name }) => {
   )
 }
 
-export default ProductCard
+export default memo(ProductCard)

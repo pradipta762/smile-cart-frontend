@@ -14,6 +14,8 @@ import { Form as NeetoUIForm } from 'neetoui/formik'
 import { CHECKOUT_FORM_INITIAL_VALUES, CHECKOUT_FORM_VALIDATION_SCHEMA, CHECKOUT_LOCAL_STORAGE_KEY } from './constants'
 import useCartItemsStore from 'src/sources/useCartItemsStore'
 import routes from 'routes'
+import { useFetchCartProducts } from 'hooks/reactQuery/useProductsApi'
+import { isEmpty, keys } from 'ramda'
 
 const Checkout = () => {
 

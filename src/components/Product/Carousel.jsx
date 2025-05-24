@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { memo, useEffect, useRef, useState } from 'react'
 import { Button } from 'neetoui'
 import { Left, Right } from 'neetoicons'
 import classNames from 'classnames'
@@ -84,4 +84,4 @@ const Carousel = () => {
   )
 }
 
-export default Carousel
+export default memo(Carousel)
