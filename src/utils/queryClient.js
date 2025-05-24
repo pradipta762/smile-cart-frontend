@@ -6,15 +6,6 @@ import { QUERY_KEYS } from "constants/query";
 const localStoragePersistor = createWebStoragePersistor({
   storage: window.localStorage,
 });
-persistQueryClient({
-  queryClient,
-  persistor: localStoragePersistor,
-  maxAge: Infinity,
-  dehydrateOptions: {
-    shouldDehydrateQuery: ({ queryKey }) =>
-    [QUERY_KEYS.COUNTRIES, QUERY_KEYS.STATES].some(key => queryKey.includes(key))
-  }
-});
 
 const queryClient = new QueryClient({
   queryCache: new QueryCache(),
@@ -24,6 +15,16 @@ const queryClient = new QueryClient({
       staleTime: 3_600_000,
     },
   },
+});
+
+persistQueryClient({
+  queryClient,
+  persistor: localStoragePersistor,
+  maxAge: Infinity,
+  dehydrateOptions: {
+    shouldDehydrateQuery: ({ queryKey }) =>
+    [QUERY_KEYS.COUNTRIES, QUERY_KEYS.STATES].some(key => queryKey.includes(key))
+  }
 });
 
 export default queryClient;
